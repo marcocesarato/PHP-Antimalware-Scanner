@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+echo "Running php-cs-fixer to format the code on git diff..."
+
+# Variables
+# shellcheck disable=SC2164
+CURRENT_DIRECTORY="$(cd "$(dirname "$0")"; pwd -P)"
+PROJECT_DIRECTORY="$(dirname "${CURRENT_DIRECTORY}")"
+
+# shellcheck disable=SC2164
+cd "${PROJECT_DIRECTORY}";
+
+PHP_CS_FIXER="${PROJECT_DIRECTORY}/vendor/bin/php-cs-fixer"
+PHP_CS_CONFIG=".php_cs"
+
+git diff --cached --name-only --diff-filter=ACMR HEAD -- '*.php' | while read line; do
+  echo " - Fixing: ${line}"
+  # PHP CS Fixer
+  php "${CURRENT_DIRECTORY}/run" ${PHP_CS_FIXER} fix --config=${PHP_CS_CONFIG} --verbose ${line};
+  git add "$line";
+done
+
+# shellcheck disable=SC2164
+cd "${CURRENT_DIRECTORY}";
+echo "[Done] Operation completed!"
