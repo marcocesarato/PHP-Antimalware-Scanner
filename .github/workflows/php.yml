@@ -39,4 +39,4 @@ jobs:
         folder: './'
         ignore: './vendor/\*'
 
-    - uses: symfonycorp/security-checker-action@v2
+    - uses: symfonycorp/security-checker-action@v5
