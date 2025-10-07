@@ -1390,6 +1390,7 @@ class Scanner
                                     $inLoop = false;
                                 } else {
                                     self::$report['ignored'][] = $filePath;
+                                    self::$report['infectedFound'][$filePath] = $patternFound;
                                 }
                                 break;
                             // Remove evil line code
@@ -1420,6 +1421,7 @@ class Scanner
                                     $inLoop = false;
                                 } else {
                                     self::$report['ignored'][] = $filePath;
+                                    self::$report['infectedFound'][$filePath] = $patternFound;
                                 }
                                 break;
                             // Open with vim
@@ -1467,6 +1469,7 @@ class Scanner
                             case in_array($confirmation, ['0', '-', 'skip']):
                                 CLI::writeLine("File '$filePath' skipped!", 2, 'green');
                                 self::$report['ignored'][] = $filePath;
+                                self::$report['infectedFound'][$filePath] = $patternFound;
                                 $inLoop = false;
                                 break;
                             default:
