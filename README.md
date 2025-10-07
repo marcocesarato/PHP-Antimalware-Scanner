@@ -4,8 +4,8 @@
 
 <h1 align="center">PHP Antimalware Scanner</h1>
 
-![Version](https://img.shields.io/badge/version-0.14.3-brightgreen?style=for-the-badge)
-![Requirements](https://img.shields.io/badge/php-%3E%3D%205.5-4F5D95?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-0.15.0-brightgreen?style=for-the-badge)
+![Requirements](https://img.shields.io/badge/php-%3E%3D%207.4-4F5D95?style=for-the-badge)
 ![Code Style](https://img.shields.io/badge/code%20style-PSR-blue?style=for-the-badge)
 ![License](https://img.shields.io/github/license/marcocesarato/PHP-Antimalware-Scanner?style=for-the-badge)
 [![GitHub](https://img.shields.io/badge/GitHub-Repo-6f42c1?style=for-the-badge)](https://github.com/marcocesarato/PHP-Antimalware-Scanner)
@@ -44,7 +44,7 @@ greatly appreciated! Every little bit helps.
 
 ## :blue_book: Requirements
 
-- php 5.5+
+- php 7.4+ (PHP 8.x recommended)
    - php-xml
    - php-zip
    - php-mbstring

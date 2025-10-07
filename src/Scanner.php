@@ -14,15 +14,6 @@ namespace AMWScan;
 use AMWScan\Console\Argv;
 use AMWScan\Console\CLI;
 use AMWScan\Templates\Report;
-use ArrayIterator;
-use ArrayObject;
-use CallbackFilterIterator;
-use Exception;
-use LimitIterator;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use RuntimeException;
-use SplFileInfo;
 
 /**
  * Class Application.
@@ -62,7 +53,7 @@ class Scanner
      *
      * @var string
      */
-    public static $version = '0.14.3';
+    public static $version = '0.15.0';
 
     /**
      * Repo url.
@@ -395,7 +386,7 @@ class Scanner
             $this->summary();
 
             return self::getReport();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->interrupt = true;
             $this->setLastError($e->getMessage());
             CLI::writeBreak();
@@ -462,7 +453,7 @@ class Scanner
         self::$argv->addFlag('disable-report', ['alias' => '--no-report', 'default' => !$isCLI, 'help' => 'Disable report generation']);
         self::$argv->addFlag('disable-checksum', ['alias' => ['--no-checksum', '--no-verify'], 'default' => false, 'help' => 'Disable checksum verifying for platforms/frameworks']);
         self::$argv->addFlag('scan-all', ['alias' => ['--all'], 'default' => false, 'help' => 'Check all files, regardless of extension']);
-        //self::$argv->addFlag('deobfuscate', ['default' => false, 'help' => 'Deobfuscate directory']);
+        // self::$argv->addFlag('deobfuscate', ['default' => false, 'help' => 'Deobfuscate directory']);
 
         self::$argv->parse($args);
 
@@ -510,7 +501,7 @@ class Scanner
         }
 
         // Backups
-        if ((isset(self::$argv['backup']) && self::$argv['backup'])) {
+        if (isset(self::$argv['backup']) && self::$argv['backup']) {
             self::enableBackups();
         }
 
@@ -658,7 +649,7 @@ class Scanner
             $ignored = array_map('trim', $ignored);
             if (!empty($ignored) && count($ignored) > 0) {
                 foreach (Exploits::getAll() as $key => $value) {
-                    if (! in_array($key, $ignored, true)) {
+                    if (!in_array($key, $ignored, true)) {
                         $exploits[$key] = $value;
                     }
                 }
@@ -831,15 +822,15 @@ class Scanner
     /**
      * Map files.
      *
-     * @return ArrayIterator
+     * @return \ArrayIterator
      */
     public function mapping()
     {
         // Mapping files
         if (is_dir(self::$pathScan)) {
-            $directory = new RecursiveDirectoryIterator(self::$pathScan);
-            $files = new RecursiveIteratorIterator($directory, RecursiveIteratorIterator::LEAVES_ONLY, RecursiveIteratorIterator::CATCH_GET_CHILD);
-            $filtered = new CallbackFilterIterator($files, function ($cur) {
+            $directory = new \RecursiveDirectoryIterator(self::$pathScan);
+            $files = new \RecursiveIteratorIterator($directory, \RecursiveIteratorIterator::LEAVES_ONLY, \RecursiveIteratorIterator::CATCH_GET_CHILD);
+            $filtered = new \CallbackFilterIterator($files, function ($cur) {
                 $ignore = false;
                 $wildcard = '.*?'; // '[^\\\\\\/]*'
                 // Ignore
@@ -859,8 +850,8 @@ class Scanner
                     }
                 }
 
-                if (!$ignore &&
-                    $cur->isDir()) {
+                if (!$ignore
+                    && $cur->isDir()) {
                     if (self::isVerifierEnabled()) {
                         Modules::init($cur->getPath());
                     }
@@ -869,9 +860,9 @@ class Scanner
                 }
 
                 return
-                    !$ignore &&
-                    $cur->isFile() &&
-                    (self::isScanAll() || in_array($cur->getExtension(), self::getExtensions(), true));
+                    !$ignore
+                    && $cur->isFile()
+                    && (self::isScanAll() || in_array($cur->getExtension(), self::getExtensions(), true));
             });
             $mapping = [];
 
@@ -894,7 +885,7 @@ class Scanner
                     CLI::progress($mapped, $count);
                 }
 
-                $object = new ArrayObject($mapping);
+                $object = new \ArrayObject($mapping);
                 $iterator = $object->getIterator();
 
                 CLI::writeBreak();
@@ -903,16 +894,14 @@ class Scanner
             return $iterator;
         }
 
-        $file = new SplFileInfo(self::$pathScan);
-        $obj = new ArrayObject([$file]);
+        $file = new \SplFileInfo(self::$pathScan);
+        $obj = new \ArrayObject([$file]);
 
         return $obj->getIterator();
     }
 
     /**
      * Detect infected favicon.
-     *
-     * @param $file
      *
      * @return bool
      */
@@ -927,8 +916,6 @@ class Scanner
 
     /**
      * Scan file.
-     *
-     * @param $info
      *
      * @return array
      */
@@ -1049,7 +1036,7 @@ class Scanner
                     $pattern,
                     $level = CodeMatch::WARNING,
                     $descriptionPrefix = '',
-                    $functionType = ''
+                    $functionType = '',
                 ) use ($contentRaw, $funcRaw, &$patternFound) {
                     $type = 'function';
                     $suffix = '';
@@ -1142,8 +1129,8 @@ class Scanner
             }
         }
 
-        if (self::shouldScanExploits() &&
-            self::isInfectedFavicon($info)) {
+        if (self::shouldScanExploits()
+            && self::isInfectedFavicon($info)) {
             $type = 'exploit';
             $key = 'infected_icon';
             $description = 'LFI (Local File Inclusion), through an infected file with icon, allow remote attackers to inject and execute arbitrary commands or code on the target machine';
@@ -1165,11 +1152,11 @@ class Scanner
             foreach ($patternFound as $value) {
                 $match1 = preg_replace('/\s+/', '', $item['match']);
                 $match2 = preg_replace('/\s+/', '', $value['match']);
-                if ($match1 === $match2 &&
-                    $item['type'] === $value['type'] &&
-                    $item['key'] === $value['key'] &&
-                    empty($item['line']) &&
-                    !empty($value['line'])
+                if ($match1 === $match2
+                    && $item['type'] === $value['type']
+                    && $item['key'] === $value['key']
+                    && empty($item['line'])
+                    && !empty($value['line'])
                 ) {
                     unset($result[$itemKey]);
                 }
@@ -1181,8 +1168,6 @@ class Scanner
 
     /**
      * Deobfuscate file.
-     *
-     * @param $info
      */
     public function deobfuscateFile($info)
     {
@@ -1201,9 +1186,9 @@ class Scanner
         }
         $filePath = self::getPathDeobfuscate() . DIRECTORY_SEPARATOR . str_replace($scanPath, '', realpath($filePath));
         $filePath = Path::get($filePath);
-        if (!is_dir(dirname($filePath)) &&
-            (!mkdir($concurrentDirectory = dirname($filePath), 0755, true) && !is_dir($concurrentDirectory))) {
-            throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+        if (!is_dir(dirname($filePath))
+            && (!mkdir($concurrentDirectory = dirname($filePath), 0755, true) && !is_dir($concurrentDirectory))) {
+            throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
         }
 
         Actions::putContents($filePath, $content);
@@ -1211,8 +1196,6 @@ class Scanner
 
     /**
      * Run index.php.
-     *
-     * @param $iterator
      */
     private function scan($iterator)
     {
@@ -1220,9 +1203,9 @@ class Scanner
         $limit = empty(self::$settings['limit']) ? null : self::$settings['limit'];
         if (!empty(self::$settings['offset'])) {
             self::$report['scanned'] = self::$settings['offset'];
-            $iterator = new LimitIterator($iterator, self::$settings['offset'], $limit);
+            $iterator = new \LimitIterator($iterator, self::$settings['offset'], $limit);
         } elseif (!empty($limit)) {
-            $iterator = new LimitIterator($iterator, 0, $limit);
+            $iterator = new \LimitIterator($iterator, 0, $limit);
         }
 
         // Scanning
@@ -1243,12 +1226,12 @@ class Scanner
             $isFavicon = self::isInfectedFavicon($info);
 
             if ((
-                (self::isScanAll() || in_array($fileExtension, self::$extensions, true)) &&
-                    (self::$maxFilesize < 1 || $fileSize <= self::$maxFilesize) &&
-                    (!file_exists(self::$pathQuarantine) || strpos(realpath($filePath), realpath(self::$pathQuarantine)) === false)
-                    /*&& (strpos($fileName, '-') === FALSE)*/
-            ) ||
-                $isFavicon) {
+                (self::isScanAll() || in_array($fileExtension, self::$extensions, true))
+                    && (self::$maxFilesize < 1 || $fileSize <= self::$maxFilesize)
+                    && (!file_exists(self::$pathQuarantine) || strpos(realpath($filePath), realpath(self::$pathQuarantine)) === false)
+                /* && (strpos($fileName, '-') === FALSE) */
+            )
+                || $isFavicon) {
                 $patternFound = $this->scanFile($info);
 
                 // Check whitelist
@@ -1259,10 +1242,10 @@ class Scanner
                         $exploit = $pattern['key'];
                         $match = $pattern['match'];
 
-                        if (strpos($filePath, $item['file']) !== false &&
-                            $match === $item['match'] &&
-                            $exploit === $item['exploit'] &&
-                            (self::isOnlyPathWhitelistMode() || (!self::isOnlyPathWhitelistMode() && $lineNumber === $item['line']))) {
+                        if (strpos($filePath, $item['file']) !== false
+                            && $match === $item['match']
+                            && $exploit === $item['exploit']
+                            && (self::isOnlyPathWhitelistMode() || (!self::isOnlyPathWhitelistMode() && $lineNumber === $item['line']))) {
                             $inWhitelist++;
                         }
                     }
@@ -1356,14 +1339,14 @@ class Scanner
                                     $inLoop = false;
                                 }
                                 break;
-                            // Move to quarantine
+                                // Move to quarantine
                             case in_array($confirmation, ['2', 'quarantine']):
                                 $quarantine = Actions::moveToQuarantine($filePath);
                                 self::$report['quarantine'][] = $quarantine;
                                 CLI::writeLine("File '$filePath' moved to quarantine!", 2, 'green');
                                 $inLoop = false;
                                 break;
-                            // Remove evil code
+                                // Remove evil code
                             case in_array($confirmation, ['3', 'clean']) && count($patternFound) > 0:
                                 $fileContent = Actions::cleanEvilCode($fileContent, $patternFound);
                                 CLI::newLine();
@@ -1393,7 +1376,7 @@ class Scanner
                                     self::$report['infectedFound'][$filePath] = $patternFound;
                                 }
                                 break;
-                            // Remove evil line code
+                                // Remove evil line code
                             case in_array($confirmation, ['4', 'clean-line']) && count($patternFound) > 0:
                                 $fileContent = Actions::cleanEvilCodeLine($fileContent, $patternFound);
 
@@ -1424,21 +1407,21 @@ class Scanner
                                     self::$report['infectedFound'][$filePath] = $patternFound;
                                 }
                                 break;
-                            // Open with vim
+                                // Open with vim
                             case in_array($confirmation, ['5', 'vim']):
                                 Actions::openWithVim($filePath);
                                 self::$report['edited'][] = $filePath;
                                 CLI::writeLine("File '$filePath' edited with vim!", 2, 'green');
                                 self::$report['removed'][] = $filePath;
                                 break;
-                            // Open with nano
+                                // Open with nano
                             case in_array($confirmation, ['6', 'nano']):
                                 Actions::openWithNano($filePath);
                                 self::$report['edited'][] = $filePath;
                                 CLI::writeLine("File '$filePath' edited with nano!", 2, 'green');
                                 self::$report['removed'][] = $filePath;
                                 break;
-                            // Add to whitelist
+                                // Add to whitelist
                             case in_array($confirmation, ['7', 'whitelist']):
                                 if (Actions::addToWhitelist($filePath, $patternFound)) {
                                     self::$report['whitelist'][] = $filePath;
@@ -1448,7 +1431,7 @@ class Scanner
                                     CLI::writeLine("Exploits of file '$filePath' failed adding file to whitelist! Check write permission of '" . self::$pathWhitelist . "' file!", 2, 'red');
                                 }
                                 break;
-                            // Show source code
+                                // Show source code
                             case in_array($confirmation, ['8', 'show']):
                                 CLI::newLine();
                                 CLI::displayLine("File path: $filePath", 2, 'yellow');
@@ -1465,7 +1448,7 @@ class Scanner
                                 CLI::newLine(2);
                                 CLI::displayLine("File path: $filePath", 2, 'yellow');
                                 break;
-                            // Skip
+                                // Skip
                             case in_array($confirmation, ['0', '-', 'skip']):
                                 CLI::writeLine("File '$filePath' skipped!", 2, 'green');
                                 self::$report['ignored'][] = $filePath;
@@ -1617,12 +1600,12 @@ class Scanner
     public static function isCli()
     {
         return
-            defined('STDIN') ||
-            php_sapi_name() === 'cli' ||
-            (
-                empty($_SERVER['REMOTE_ADDR']) &&
-                !isset($_SERVER['HTTP_USER_AGENT']) &&
-                count($_SERVER['argv']) > 0
+            defined('STDIN')
+            || php_sapi_name() === 'cli'
+            || (
+                empty($_SERVER['REMOTE_ADDR'])
+                && !isset($_SERVER['HTTP_USER_AGENT'])
+                && count($_SERVER['argv']) > 0
             );
     }
 
@@ -1633,7 +1616,7 @@ class Scanner
     {
         $this->interrupt = true;
         if (self::isCli()) {
-            exit();
+            exit;
         }
     }
 
@@ -2388,8 +2371,6 @@ class Scanner
     }
 
     /**
-     * @param mixed $maxFilesize
-     *
      * @return self
      */
     public static function setMaxFilesize($maxFilesize)

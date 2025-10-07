@@ -16,7 +16,7 @@ PHP_CS_CONFIG=".php-cs-fixer.php"
 git diff --cached --name-only --diff-filter=ACMR HEAD -- '*.php' | while read line; do
   echo " - Fixing: ${line}"
   # PHP CS Fixer
-  php "${CURRENT_DIRECTORY}/run" ${PHP_CS_FIXER} fix --config=${PHP_CS_CONFIG} --verbose ${line};
+  PHP_CS_FIXER_IGNORE_ENV=1 php "${CURRENT_DIRECTORY}/run" ${PHP_CS_FIXER} fix --config=${PHP_CS_CONFIG} --verbose ${line};
   git add "$line";
 done
 

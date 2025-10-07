@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Antimalware Scanner.
  *
@@ -10,13 +11,10 @@
 
 namespace AMWScan\Console;
 
-use ArrayAccess;
-use Closure;
-
 /**
  * Class Argv.
  */
-class Argv implements ArrayAccess
+class Argv implements \ArrayAccess
 {
     /**
      * @var null
@@ -54,15 +52,13 @@ class Argv implements ArrayAccess
     /**
      * Build.
      *
-     * @param $callback
-     *
      * @return static
      */
     public static function build($callback)
     {
         $static = new static();
         $bindTo = [$callback, 'bindTo'];
-        if ($callback instanceof Closure && is_callable($bindTo)) {
+        if ($callback instanceof \Closure && is_callable($bindTo)) {
             $callback = $callback->bindTo($static);
         }
         $callback($static);
@@ -159,7 +155,6 @@ class Argv implements ArrayAccess
     /**
      * Add Flag.
      *
-     * @param $name
      * @param array $options
      * @param null $callback
      *
@@ -178,8 +173,6 @@ class Argv implements ArrayAccess
     /**
      * Add flag var.
      *
-     * @param $name
-     * @param $var
      * @param array $options
      *
      * @return Argv
@@ -194,7 +187,6 @@ class Argv implements ArrayAccess
     /**
      * Add Argument.
      *
-     * @param $name
      * @param array $options
      *
      * @return $this
@@ -229,10 +221,6 @@ class Argv implements ArrayAccess
 
     /**
      * Get flag or argument.
-     *
-     * @param $name
-     *
-     * @return mixed
      */
     public function get($name)
     {
@@ -241,10 +229,6 @@ class Argv implements ArrayAccess
 
     /**
      * Get argument from position.
-     *
-     * @param $pos
-     *
-     * @return mixed
      */
     public function arg($pos)
     {
@@ -260,10 +244,6 @@ class Argv implements ArrayAccess
 
     /**
      * Get flag.
-     *
-     * @param $name
-     *
-     * @return mixed
      */
     public function flag($name)
     {
@@ -363,7 +343,6 @@ class Argv implements ArrayAccess
     }
 
     /**
-     * @param $start
      * @param null $length
      *
      * @return array
@@ -373,21 +352,16 @@ class Argv implements ArrayAccess
         return array_slice($this->parsedArgs, $start, $length);
     }
 
-    /**
-     * @param mixed $offset
-     *
-     * @return mixed
-     */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->get($offset);
     }
 
     /**
-     * @param mixed $offset
-     *
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return null !== $this->get($offset);
@@ -395,19 +369,16 @@ class Argv implements ArrayAccess
 
     /**
      * Set Offest.
-     *
-     * @param mixed $offset
-     * @param mixed $value
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
     }
 
     /**
      * Unset Offset.
-     *
-     * @param mixed $offset
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
     }

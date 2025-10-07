@@ -4,6 +4,28 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [0.14.4](https://github.com/marcocesarato/PHP-Antimalware-Scanner/compare/v0.14.3...v0.14.4) (2025-10-07)
+
+
+---
+
+## [0.15.0](https://github.com/marcocesarato/PHP-Antimalware-Scanner/compare/v0.14.3...v0.15.0) (2025-10-07)
+
+### Breaking Changes
+
+* **PHP Version:** Minimum PHP version upgraded from 5.5 to 7.4
+  - This aligns with modern PHP standards and security best practices
+  - Dev dependencies already required PHP 7.4+, this makes the runtime requirement consistent
+
+### Dependencies Updates
+
+* **friendsofphp/php-cs-fixer:** Updated from ^3.13 to ^3.88
+* **brainmaestro/composer-git-hooks:** Updated from v2.8 to ^3.0
+* **marcocesarato/php-conventional-changelog:** Updated from 1.10 to ^1.17
+* All Symfony components upgraded to latest versions (7.x)
+
+---
+
 ## [0.14.3](https://github.com/marcocesarato/PHP-Antimalware-Scanner/compare/v0.14.2...v0.14.3) (2025-10-07)
 
 

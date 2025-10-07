@@ -14,7 +14,7 @@ PHP_CS_FIXER="${PROJECT_DIRECTORY}/vendor/bin/php-cs-fixer"
 PHP_CS_CONFIG=".php-cs-fixer.php"
 
 # PHP CS Fixer
-php "${CURRENT_DIRECTORY}/run" ${PHP_CS_FIXER} fix --config=${PHP_CS_CONFIG} --verbose;
+PHP_CS_FIXER_IGNORE_ENV=1 php "${CURRENT_DIRECTORY}/run" ${PHP_CS_FIXER} fix --config=${PHP_CS_CONFIG} --verbose;
 
 git add "${PROJECT_DIRECTORY}"
 
