@@ -45,6 +45,8 @@ $p->buildFromDirectory($input);
 
 // Create a custom CLI-only stub without webPhar()
 // This avoids signature verification issues when the phar is downloaded/transferred
+// webPhar() performs strict signature validation which can fail if the file is
+// corrupted during download. mapPhar() is more lenient and suitable for CLI-only usage.
 $stub = <<<'STUB'
 #!/usr/bin/env php
 <?php
