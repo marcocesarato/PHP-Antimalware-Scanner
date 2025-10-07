@@ -429,7 +429,7 @@ class Scanner
         self::$argv->addFlag('report-format', ['default' => false, 'has_value' => true, 'value_name' => 'format', 'help' => 'Report format (html|txt)']);
         self::$argv->addFlag('version', ['alias' => '-v', 'default' => false, 'help' => 'Get version number']);
         self::$argv->addFlag('update', ['alias' => '-u', 'default' => false, 'help' => 'Update to last version']);
-        self::$argv->addFlag('only-signatures', ['alias' => '-s', 'default' => false, 'help' => "Check only functions and not the exploits.\nThis is recommended for WordPress or others platforms"]);
+        self::$argv->addFlag('only-signatures', ['alias' => '-s', 'default' => false, 'help' => "Check only signatures and not the functions or exploits.\nThis is recommended for WordPress or others platforms"]);
         self::$argv->addFlag('only-exploits', ['alias' => '-e', 'default' => false, 'help' => 'Check only exploits and not the functions']);
         self::$argv->addFlag('only-functions', ['alias' => '-f', 'default' => false, 'help' => 'Check only functions and not the exploits']);
         self::$argv->addFlag('defs', ['default' => false, 'help' => 'Get default definitions exploit and functions list']);
@@ -846,7 +846,7 @@ class Scanner
                 foreach (self::$ignorePaths as $ignorePath) {
                     $ignorePath = preg_quote($ignorePath, ';');
                     $ignorePath = str_replace('\*', $wildcard, $ignorePath);
-                    if (preg_match(';' . $ignorePath . ';i', $cur->getPath())) {
+                    if (preg_match(';' . $ignorePath . ';i', $cur->getPathname())) {
                         $ignore = true;
                     }
                 }
@@ -854,7 +854,7 @@ class Scanner
                 foreach (self::$filterPaths as $filterPath) {
                     $filterPath = preg_quote($filterPath, ';');
                     $filterPath = str_replace('\*', $wildcard, $filterPath);
-                    if (!preg_match(';' . $filterPath . ';i', $cur->getPath())) {
+                    if (!preg_match(';' . $filterPath . ';i', $cur->getPathname())) {
                         $ignore = true;
                     }
                 }
@@ -1390,6 +1390,7 @@ class Scanner
                                     $inLoop = false;
                                 } else {
                                     self::$report['ignored'][] = $filePath;
+                                    self::$report['infectedFound'][$filePath] = $patternFound;
                                 }
                                 break;
                             // Remove evil line code
@@ -1420,6 +1421,7 @@ class Scanner
                                     $inLoop = false;
                                 } else {
                                     self::$report['ignored'][] = $filePath;
+                                    self::$report['infectedFound'][$filePath] = $patternFound;
                                 }
                                 break;
                             // Open with vim
@@ -1467,6 +1469,7 @@ class Scanner
                             case in_array($confirmation, ['0', '-', 'skip']):
                                 CLI::writeLine("File '$filePath' skipped!", 2, 'green');
                                 self::$report['ignored'][] = $filePath;
+                                self::$report['infectedFound'][$filePath] = $patternFound;
                                 $inLoop = false;
                                 break;
                             default:
