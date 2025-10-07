@@ -62,7 +62,7 @@ class Scanner
      *
      * @var string
      */
-    public static $version = '0.14.1';
+    public static $version = '0.14.3';
 
     /**
      * Repo url.

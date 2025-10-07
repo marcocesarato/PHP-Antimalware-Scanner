@@ -6,6 +6,10 @@ chdir(dirname(__DIR__));
 
 if (is_console()) {
     array_shift($argv);
+    if (!isset($argv[0])) {
+        echo "[ERROR] > No file argument provided.\n";
+        exit(1);
+    }
     $file = $argv[0];
     if (file_exists($file)) {
         // Read shebang

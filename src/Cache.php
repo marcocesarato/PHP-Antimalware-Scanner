@@ -223,12 +223,16 @@ class Cache extends SingletonAbstract
             '/\.{2,}/',  // "file...name..zip" becomes "file.name.zip"
         ], '.', $filename);
         // lowercase for windows/unix interoperability http://support.microsoft.com/kb/100625
-        $filename = mb_strtolower($filename, mb_detect_encoding($filename));
+        $encoding = mb_detect_encoding($filename);
+        $encoding = ($encoding && $encoding !== 'AUTO') ? $encoding : 'UTF-8';
+        $filename = mb_strtolower($filename, $encoding);
         // ".file-name.-" becomes "file-name"
         $filename = trim($filename, '.-');
 
         $ext = pathinfo($filename, PATHINFO_EXTENSION);
-        $filename = mb_strcut(pathinfo($filename, PATHINFO_FILENAME), 0, 255 - ($ext !== '' ? strlen($ext) + 1 : 0), mb_detect_encoding($filename)) . ($ext !== '' ? '.' . $ext : '');
+        $encoding = mb_detect_encoding($filename);
+        $encoding = ($encoding && $encoding !== 'AUTO') ? $encoding : 'UTF-8';
+        $filename = mb_strcut(pathinfo($filename, PATHINFO_FILENAME), 0, 255 - ($ext !== '' ? strlen($ext) + 1 : 0), $encoding) . ($ext !== '' ? '.' . $ext : '');
 
         return trim($filename, '.-_');
     }

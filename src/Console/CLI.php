@@ -504,7 +504,10 @@ class CLI
      */
     public static function escape($string)
     {
-        return mb_convert_encoding(preg_replace('/(e|\x1B|[[:cntrl:]]|\033)\[(\d{1,2}(;\d{1,2})?)?[mGKc]/', '', $string), 'utf-8', 'auto');
+        $cleaned = preg_replace('/(e|\x1B|[[:cntrl:]]|\033)\[(\d{1,2}(;\d{1,2})?)?[mGKc]/', '', $string);
+        $encoding = mb_detect_encoding($cleaned, mb_detect_order(), true);
+        $encoding = ($encoding && $encoding !== 'AUTO') ? $encoding : 'UTF-8';
+        return mb_convert_encoding($cleaned, 'UTF-8', $encoding);
     }
 
     /**
