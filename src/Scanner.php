@@ -429,7 +429,7 @@ class Scanner
         self::$argv->addFlag('report-format', ['default' => false, 'has_value' => true, 'value_name' => 'format', 'help' => 'Report format (html|txt)']);
         self::$argv->addFlag('version', ['alias' => '-v', 'default' => false, 'help' => 'Get version number']);
         self::$argv->addFlag('update', ['alias' => '-u', 'default' => false, 'help' => 'Update to last version']);
-        self::$argv->addFlag('only-signatures', ['alias' => '-s', 'default' => false, 'help' => "Check only functions and not the exploits.\nThis is recommended for WordPress or others platforms"]);
+        self::$argv->addFlag('only-signatures', ['alias' => '-s', 'default' => false, 'help' => "Check only signatures and not the functions or exploits.\nThis is recommended for WordPress or others platforms"]);
         self::$argv->addFlag('only-exploits', ['alias' => '-e', 'default' => false, 'help' => 'Check only exploits and not the functions']);
         self::$argv->addFlag('only-functions', ['alias' => '-f', 'default' => false, 'help' => 'Check only functions and not the exploits']);
         self::$argv->addFlag('defs', ['default' => false, 'help' => 'Get default definitions exploit and functions list']);

@@ -54,7 +54,7 @@ To open files with nano or vim run the scripts with **php -d disable_functions='
 --offset <offset>                              - Set file mapping offset
 --only-exploits|-e                             - Check only exploits and not the functions
 --only-functions|-f                            - Check only functions and not the exploits
---only-signatures|-s                           - Check only functions and not the exploits.
+--only-signatures|-s                           - Check only signatures and not the functions or exploits.
                                                  This is recommended for WordPress or others platforms
 --path-backups <path>                          - Set backups path directory.
                                                  Is recommended put files outside the public document path
