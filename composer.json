@@ -49,22 +49,22 @@
         "build": "php bin/build",
         "fix-cs": "sh bin/fix-cs",
         "fix-cs-all": "sh bin/fix-cs-all",
-        "check-cs": "php bin/run vendor/bin/php-cs-fixer fix --dry-run --format=txt --verbose --diff --diff-format=udiff --config=.php-cs-fixer.php",
+        "check-cs": "php -d PHP_CS_FIXER_IGNORE_ENV=1 bin/run vendor/bin/php-cs-fixer fix --dry-run --format=txt --verbose --diff --diff-format=udiff --config=.php-cs-fixer.php",
         "lint": "sh bin/lint",
         "post-install-cmd": "php bin/run vendor/bin/cghooks add --ignore-lock",
         "post-update-cmd": "php bin/run vendor/bin/cghooks update"
     },
     "require": {
-        "php": ">=5.5",
+        "php": ">=7.4",
         "ext-json": "*",
         "ext-fileinfo": "*",
         "ext-zlib": "*",
         "ext-mbstring": "*"
     },
     "require-dev": {
-        "brainmaestro/composer-git-hooks": "^2.8",
-        "friendsofphp/php-cs-fixer": "^3.0",
-        "marcocesarato/php-conventional-changelog": "^1.10"
+        "brainmaestro/composer-git-hooks": "^3.0",
+        "friendsofphp/php-cs-fixer": "^3.88",
+        "marcocesarato/php-conventional-changelog": "^1.17"
     },
     "config": {
         "process-timeout": 0,
@@ -81,10 +81,10 @@
                 "sh bin/pre-commit"
             ],
             "pre-push": [
-                "php bin/run vendor/bin/php-cs-fixer fix --dry-run --format=txt --verbose --diff --diff-format=udiff --config=.php_cs"
+                "PHP_CS_FIXER_IGNORE_ENV=1 php bin/run vendor/bin/php-cs-fixer fix --dry-run --format=txt --verbose --diff --diff-format=udiff --config=.php-cs-fixer.php"
             ],
             "post-merge": "composer install"
         }
     },
-    "version": "0.14.3"
+    "version": "0.14.4"
 }
