@@ -4,11 +4,6 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
-## [0.14.4](https://github.com/marcocesarato/PHP-Antimalware-Scanner/compare/v0.14.3...v0.14.4) (2025-10-07)
-
-
----
-
 ## [0.15.0](https://github.com/marcocesarato/PHP-Antimalware-Scanner/compare/v0.14.3...v0.15.0) (2025-10-07)
 
 ### Breaking Changes
