@@ -182,7 +182,11 @@ class Deobfuscator
             return $this->calc($expr);
         }, $res);
         $res = preg_replace_callback('|(round\((.+?)\))|smi', function ($matches) {
-            return round($matches[2]);
+            $value = $matches[2];
+            if (is_numeric($value)) {
+                return round($value);
+            }
+            return $matches[0];
         }, $res);
         $res = preg_replace_callback('|base64_decode\(["\'](.*?)["\']\)|smi', function ($matches) {
             return "'" . base64_decode($matches[1]) . "'";
@@ -205,7 +209,7 @@ class Deobfuscator
                     return trim($value, "'");
                 }, $funclist[$varname]);
 
-                $res = preg_replace_callback('|\$(?:\{(?:"|\'))?GLOBALS(?:(?:"|\')\})?\[\'' . $varname . '\'\]\[(\d+)\]|smi', function ($matches) use ($varname, $funclist) {
+                $res = preg_replace_callback('|\$(?:\{(?:"|\'))?GLOBALS(?:(?:"|\')\})?\[\'' . preg_quote($varname, '|') . '\'\]\[(\d+)\]|smi', function ($matches) use ($varname, $funclist) {
                     return $funclist[$varname][$matches[1]];
                 }, $res);
             }
