@@ -846,7 +846,7 @@ class Scanner
                 foreach (self::$ignorePaths as $ignorePath) {
                     $ignorePath = preg_quote($ignorePath, ';');
                     $ignorePath = str_replace('\*', $wildcard, $ignorePath);
-                    if (preg_match(';' . $ignorePath . ';i', $cur->getPath())) {
+                    if (preg_match(';' . $ignorePath . ';i', $cur->getPathname())) {
                         $ignore = true;
                     }
                 }
@@ -854,7 +854,7 @@ class Scanner
                 foreach (self::$filterPaths as $filterPath) {
                     $filterPath = preg_quote($filterPath, ';');
                     $filterPath = str_replace('\*', $wildcard, $filterPath);
-                    if (!preg_match(';' . $filterPath . ';i', $cur->getPath())) {
+                    if (!preg_match(';' . $filterPath . ';i', $cur->getPathname())) {
                         $ignore = true;
                     }
                 }
