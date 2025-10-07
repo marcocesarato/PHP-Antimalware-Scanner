@@ -40,14 +40,18 @@ $p = new Phar($output);
 // start buffering. Mandatory to modify stub.
 $p->startBuffering();
 
-// pointing main file which requires all classes
-$defaultStub = $p->createDefaultStub('index.php', '/index.php');
-
 // creating our library using whole directory
 $p->buildFromDirectory($input);
 
-// Create a custom stub to add the shebang
-$stub = "#!/usr/bin/env php\n" . $defaultStub;
+// Create a custom CLI-only stub without webPhar()
+// This avoids signature verification issues when the phar is downloaded/transferred
+$stub = <<<'STUB'
+#!/usr/bin/env php
+<?php
+Phar::mapPhar();
+require 'phar://' . __FILE__ . '/index.php';
+__HALT_COMPILER();
+STUB;
 
 // Add the stub
 $p->setStub($stub);
