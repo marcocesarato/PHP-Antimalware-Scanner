@@ -11,8 +11,6 @@
 
 namespace AMWScan;
 
-use Phar;
-
 // Autoload
 spl_autoload_register(function ($name) {
     $namespace = __NAMESPACE__ . '\\';
@@ -20,7 +18,7 @@ spl_autoload_register(function ($name) {
     if (strpos($classname, $namespace) === 0) {
         $file = str_replace(__NAMESPACE__ . '\\', '', $name) . '.php';
         $file = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $file);
-        if (Phar::running() === '') {
+        if (\Phar::running() === '') {
             $file = __DIR__ . '/' . $file;
         }
         require_once $file;
@@ -40,5 +38,12 @@ ini_set('display_startup_errors', 0);
 
 if (Scanner::isCli()) {
     $app = new Scanner();
-    $app->run();
+    $report = $app->run();
+
+    // Exit with appropriate code for CI/CD systems
+    if (is_object($report) && isset($report->detected) && $report->detected > 0) {
+        exit(1); // Malware detected
+    }
+
+    exit(0); // No issues or scan completed successfully
 }
