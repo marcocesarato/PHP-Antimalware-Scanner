@@ -171,8 +171,9 @@ class Actions
      * Open with VIM.
      *
      * @param $file
+     * @param $lineNumber
      */
-    public static function openWithVim($file)
+    public static function openWithVim($file, $lineNumber = null)
     {
         if (Scanner::isBackupEnabled()) {
             self::makeBackup($file);
@@ -183,7 +184,12 @@ class Actions
             ['file', '/dev/tty', 'w'],
             ['file', '/dev/tty', 'w'],
         ];
-        $process = proc_open("vim '$file'", $descriptors, $pipes);
+        $command = "vim ";
+        if ($lineNumber !== null && is_numeric($lineNumber) && $lineNumber > 0) {
+            $command .= "+$lineNumber ";
+        }
+        $command .= "'$file'";
+        $process = proc_open($command, $descriptors, $pipes);
         while (true) {
             $procStatus = proc_get_status($process);
             if ($procStatus['running'] == false) {
@@ -196,8 +202,9 @@ class Actions
      * Open with Nano.
      *
      * @param $file
+     * @param $lineNumber
      */
-    public static function openWithNano($file)
+    public static function openWithNano($file, $lineNumber = null)
     {
         if (Scanner::isBackupEnabled()) {
             self::makeBackup($file);
@@ -208,7 +215,12 @@ class Actions
             ['file', '/dev/tty', 'w'],
             ['file', '/dev/tty', 'w'],
         ];
-        $process = proc_open("nano '$file'", $descriptors, $pipes);
+        $command = "nano ";
+        if ($lineNumber !== null && is_numeric($lineNumber) && $lineNumber > 0) {
+            $command .= "+$lineNumber ";
+        }
+        $command .= "'$file'";
+        $process = proc_open($command, $descriptors, $pipes);
         while (true) {
             $procStatus = proc_get_status($process);
             if ($procStatus['running'] == false) {
