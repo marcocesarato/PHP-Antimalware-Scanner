@@ -9,3 +9,11 @@ vendor/**
 .php-cs-fixer.cache
 cghooks.lock
 
+# Test artifacts
+.phpunit.result.cache
+coverage/
+phpunit.xml.bak
+tests/Fixtures/tmp/
+tests/Fixtures/reports/
+/scanner-quarantine/
+/scanner-backups/
