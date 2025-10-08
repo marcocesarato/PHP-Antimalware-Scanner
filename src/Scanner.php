@@ -166,6 +166,8 @@ class Scanner
         'phtm',
         'phtml',
         'ico',
+        'css',
+        'ccss',
     ];
 
     /**

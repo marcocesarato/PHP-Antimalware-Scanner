@@ -9,3 +9,6 @@ vendor/**
 .php-cs-fixer.cache
 cghooks.lock
 
+# Test files for CSS file scanning
+test-css-scanning.php
+
