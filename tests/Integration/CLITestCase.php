@@ -119,6 +119,7 @@ abstract class CLITestCase extends TestCase
                 $reports = array_merge(
                     glob($dir . '/scanner-report*.html'),
                     glob($dir . '/scanner-report*.txt'),
+                    glob($dir . '/scanner-report*.log'),
                     glob($dir . '/scanner-whitelist.json')
                 );
 

@@ -37,11 +37,11 @@ class ReportModeTest extends CLITestCase
 
     public function testReportModeCreatesTextReport()
     {
-        $reportPath = $this->reportsPath . '/test-text-report.txt';
+        $reportPath = $this->reportsPath . '/test-text-report.log';
 
         $result = $this->runScanner(
             $this->fixturesPath . '/malware',
-            ['--report', '--report-format=text', '--auto-skip', '--path-report=' . $this->reportsPath . '/test-text-report']
+            ['--report', '--report-format=txt', '--auto-skip', '--path-report=' . $this->reportsPath . '/test-text-report']
         );
 
         $this->assertFileExists($reportPath, 'Text report should be created');

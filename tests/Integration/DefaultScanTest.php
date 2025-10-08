@@ -55,8 +55,8 @@ class DefaultScanTest extends CLITestCase
             ['--report', '--auto-skip']
         );
 
-        // Should scan all 3 clean files we created
-        $this->assertRegExp('/\d+\s+(files?\s+)?scanned/i', $result['output']);
+        // Should report the number of files scanned
+        $this->assertRegExp('/Files scanned:\s*\d+/i', $result['output']);
     }
 
     public function testScanDetectsMalwarePatterns()
