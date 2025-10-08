@@ -9,3 +9,12 @@ vendor/**
 .php-cs-fixer.cache
 cghooks.lock
 
+# Test files
+test-css-detection.php
+test-scanner-css.php
+test-malware-css/
+test-files/.dd8cff6b.php
+test-files/.dd8cff6b.css
+test-files/.abc12345.ccss
+test-files/normal.css
+
