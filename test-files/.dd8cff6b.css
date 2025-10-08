@@ -1,0 +1,4 @@
+<?php
+// This is a test malware file disguised as CSS
+eval(base64_decode('ZWNobyAiSGVsbG8gZnJvbSBtYWx3YXJlIjs='));
+?>
