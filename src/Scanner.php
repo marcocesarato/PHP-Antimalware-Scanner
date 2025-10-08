@@ -166,6 +166,8 @@ class Scanner
         'phtm',
         'phtml',
         'ico',
+        'css',
+        'ccss',
     ];
 
     /**
@@ -915,20 +917,6 @@ class Scanner
     }
 
     /**
-     * Detect infected CSS file (malware hiding as CSS).
-     *
-     * @return bool
-     */
-    public static function isInfectedCSS($file)
-    {
-        // Case .[hexadecimal].css or .[hexadecimal].ccss
-        $fileName = $file->getFilename();
-        $fileExtension = $file->getExtension();
-
-        return ($fileExtension === 'css' || $fileExtension === 'ccss') && preg_match('/^\\.[0-9a-f]{8}\\.(css|ccss)$/i', trim($fileName));
-    }
-
-    /**
      * Scan file.
      *
      * @return array
@@ -1160,23 +1148,6 @@ class Scanner
             ];
         }
 
-        if (self::shouldScanExploits()
-            && self::isInfectedCSS($info)) {
-            $type = 'exploit';
-            $key = 'infected_css';
-            $description = 'RCE (Remote Code Execution), through an infected CSS file with suspicious filename pattern, allow remote attackers to execute arbitrary commands or code on the target machine';
-            $patternFound[$key] = [
-                'type' => $type,
-                'key' => $key,
-                'level' => CodeMatch::DANGEROUS,
-                'output' => CodeMatch::getText($type, $key, $description, ''),
-                'description' => $description,
-                'line' => '',
-                'pattern' => '',
-                'match' => '',
-            ];
-        }
-
         // Remove duplicated without line number
         $result = $patternFound;
         foreach ($patternFound as $itemKey => $item) {
@@ -1255,7 +1226,6 @@ class Scanner
             }
 
             $isFavicon = self::isInfectedFavicon($info);
-            $isInfectedCSS = self::isInfectedCSS($info);
 
             if ((
                 (self::isScanAll() || in_array($fileExtension, self::$extensions, true))
@@ -1263,7 +1233,7 @@ class Scanner
                     && (!file_exists(self::$pathQuarantine) || strpos(realpath($filePath), realpath(self::$pathQuarantine)) === false)
                 /* && (strpos($fileName, '-') === FALSE) */
             )
-                || $isFavicon || $isInfectedCSS) {
+                || $isFavicon) {
                 $patternFound = $this->scanFile($info);
 
                 // Check whitelist
@@ -1288,7 +1258,7 @@ class Scanner
                 self::$report['scanned']++;
                 usleep(10);
 
-                if (realpath($filePath) !== realpath(__FILE__) && ($isFavicon || $isInfectedCSS || !empty($patternFound)) && ($inWhitelist === 0 || $inWhitelist !== count($patternFound))) {
+                if (realpath($filePath) !== realpath(__FILE__) && ($isFavicon || !empty($patternFound)) && ($inWhitelist === 0 || $inWhitelist !== count($patternFound))) {
                     self::$report['detected']++;
                     if (self::isReportMode()) {
                         // Scan mode only

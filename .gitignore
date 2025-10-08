@@ -9,9 +9,6 @@ vendor/**
 .php-cs-fixer.cache
 cghooks.lock
 
-# Test files for CSS malware detection
-test-css-detection.php
-test-scanner-css.php
-test-malware-css/
-verify-css-detection.php
+# Test files for CSS file scanning
+test-css-scanning.php
 
