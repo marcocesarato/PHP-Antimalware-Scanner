@@ -69,7 +69,8 @@
         "brainmaestro/composer-git-hooks": "^3.0",
         "friendsofphp/php-cs-fixer": "^3.88",
         "marcocesarato/php-conventional-changelog": "^1.17",
-        "phpunit/phpunit": "^8.5|^9.5"
+        "phpunit/phpunit": "^8.5|^9.5",
+        "symfony/console": "^5.4"
     },
     "config": {
         "process-timeout": 0,
