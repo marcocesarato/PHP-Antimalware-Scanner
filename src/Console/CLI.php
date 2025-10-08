@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHP Antimalware Scanner.
  *
@@ -70,8 +71,6 @@ class CLI
     /**
      * Get new line char.
      *
-     * @param $n
-     *
      * @return string
      */
     public static function eol($n)
@@ -127,7 +126,8 @@ class CLI
         $title = self::title('');
         self::display($title, 'black', 'green');
         self::newLine(2);
-        $version = file_get_contents(Scanner::getLatestVersionUrl());
+        $context = stream_context_create(['http' => ['timeout' => 2]]);
+        $version = @file_get_contents(Scanner::getLatestVersionUrl(), false, $context);
         if (!empty($version) && version_compare(Scanner::$version, $version, '<')) {
             self::write('New version', 'green');
             self::write(' ' . $version . ' ', 'green');
@@ -138,7 +138,6 @@ class CLI
     /**
      * Print title.
      *
-     * @param $text
      * @param string $char
      * @param int $length
      *
@@ -233,10 +232,6 @@ class CLI
 
     /**
      * Display title bar.
-     *
-     * @param $string
-     * @param $foregroundColor
-     * @param $backgroundColor
      */
     public static function displayTitle($string, $foregroundColor, $backgroundColor)
     {
@@ -266,7 +261,6 @@ class CLI
     /**
      * Print message without writing logs.
      *
-     * @param $string
      * @param int $eol
      * @param string $foregroundColor
      * @param null $backgroundColor
@@ -279,9 +273,6 @@ class CLI
 
     /**
      * Choice.
-     *
-     * @param $question
-     * @param $options
      *
      * @return string
      */
@@ -298,8 +289,6 @@ class CLI
     /**
      * Print option.
      *
-     * @param $num
-     * @param $string
      * @param string $foregroundColor
      * @param null $backgroundColor
      * @param bool $escape
@@ -312,7 +301,6 @@ class CLI
     /**
      * Print message without writing logs.
      *
-     * @param $string
      * @param string $foregroundColor
      * @param null $backgroundColor
      */
@@ -349,7 +337,6 @@ class CLI
     /**
      * Print message.
      *
-     * @param $string
      * @param string|null $foregroundColor
      * @param string|null $backgroundColor
      * @param null $log
@@ -385,7 +372,7 @@ class CLI
         }
 
         if ($log) {
-            self::log($string, (!empty($foregroundColor) && $foregroundColor !== 'white' ? $foregroundColor : $backgroundColor));
+            self::log($string, !empty($foregroundColor) && $foregroundColor !== 'white' ? $foregroundColor : $backgroundColor);
         }
     }
 
@@ -441,7 +428,6 @@ class CLI
     /**
      * Print code.
      *
-     * @param $string
      * @param array $errors
      * @param bool $log
      */
@@ -468,7 +454,6 @@ class CLI
     /**
      * Write logs.
      *
-     * @param $string
      * @param string $color
      */
     public static function log($string, $color = '')
@@ -498,8 +483,6 @@ class CLI
     /**
      * Escape colors string.
      *
-     * @param $string
-     *
      * @return string
      */
     public static function escape($string)
@@ -507,6 +490,7 @@ class CLI
         $cleaned = preg_replace('/(e|\x1B|[[:cntrl:]]|\033)\[(\d{1,2}(;\d{1,2})?)?[mGKc]/', '', $string);
         $encoding = mb_detect_encoding($cleaned, mb_detect_order(), true);
         $encoding = ($encoding && $encoding !== 'AUTO') ? $encoding : 'UTF-8';
+
         return mb_convert_encoding($cleaned, 'UTF-8', $encoding);
     }
 
@@ -545,8 +529,6 @@ class CLI
     }
 
     /**
-     * @param $text
-     *
      * @return string
      */
     public static function wordWrap($text)
