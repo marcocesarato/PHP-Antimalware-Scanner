@@ -9,6 +9,11 @@ vendor/**
 .php-cs-fixer.cache
 cghooks.lock
 
-# Test files for CSS file scanning
-test-css-scanning.php
-
+# Test artifacts
+.phpunit.result.cache
+coverage/
+phpunit.xml.bak
+tests/Fixtures/tmp/
+tests/Fixtures/reports/
+/scanner-quarantine/
+/scanner-backups/

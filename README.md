@@ -156,6 +156,39 @@ Click the GitHub page "Clone or download" or download from:
 3. Run command
    `docker run -it --rm amwscan-docker bash`
 
+## :test_tube: Testing
+
+The project includes a comprehensive test suite with unit and integration tests.
+
+### Running Tests
+
+```bash
+# Run all tests
+composer test
+
+# Run only unit tests
+composer test:unit
+
+# Run only integration tests
+composer test:integration
+
+# Generate coverage report
+composer test:coverage
+```
+
+### Writing Tests
+
+Tests are organized into:
+- **Unit Tests** (`tests/Unit/`) - Fast, isolated tests for individual classes
+- **Integration Tests** (`tests/Integration/`) - CLI execution tests with various configurations
+- **Test Fixtures** (`tests/Fixtures/`) - Sample files for testing (clean, malware, obfuscated)
+
+For detailed information on writing and debugging tests, see [TESTING.md](TESTING.md).
+
+### Continuous Integration
+
+Tests run automatically on pull requests and pushes across multiple PHP versions (7.4, 8.0, 8.1, 8.2, 8.3).
+
 ## :mag_right: Scanning mode
 
 The first think you need to decide is the strength, you need to calibrate your scan to find less false positive as possible during scanning without miss for real malware.
