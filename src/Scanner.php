@@ -1409,14 +1409,28 @@ class Scanner
                                 break;
                                 // Open with vim
                             case in_array($confirmation, ['5', 'vim']):
-                                Actions::openWithVim($filePath);
+                                $firstLineNumber = null;
+                                foreach ($patternFound as $pattern) {
+                                    if (!empty($pattern['line']) && is_numeric($pattern['line'])) {
+                                        $firstLineNumber = $pattern['line'];
+                                        break;
+                                    }
+                                }
+                                Actions::openWithVim($filePath, $firstLineNumber);
                                 self::$report['edited'][] = $filePath;
                                 CLI::writeLine("File '$filePath' edited with vim!", 2, 'green');
                                 self::$report['removed'][] = $filePath;
                                 break;
                                 // Open with nano
                             case in_array($confirmation, ['6', 'nano']):
-                                Actions::openWithNano($filePath);
+                                $firstLineNumber = null;
+                                foreach ($patternFound as $pattern) {
+                                    if (!empty($pattern['line']) && is_numeric($pattern['line'])) {
+                                        $firstLineNumber = $pattern['line'];
+                                        break;
+                                    }
+                                }
+                                Actions::openWithNano($filePath, $firstLineNumber);
                                 self::$report['edited'][] = $filePath;
                                 CLI::writeLine("File '$filePath' edited with nano!", 2, 'green');
                                 self::$report['removed'][] = $filePath;
