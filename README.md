@@ -89,6 +89,46 @@ Go to the GitHub page and press on the Releases tab or download the raw file fro
 
    Now you can run the scanner simply with this command: `awscan ./dir-to-scan -l...`
 
+### Composer
+
+The package is available on [Packagist](https://packagist.org/packages/marcocesarato/amwscan).
+
+##### Global Installation (recommended)
+
+For system-wide installation, use:
+
+```sh
+composer global require marcocesarato/amwscan
+```
+
+After installation, run the scanner using:
+
+```sh
+php $(composer global config home)/vendor/marcocesarato/amwscan/src/index.php <path-to-scan> [options]
+```
+
+Or create an alias for easier usage:
+
+```sh
+alias amwscan='php $(composer global config home)/vendor/marcocesarato/amwscan/src/index.php'
+```
+
+Then you can run: `amwscan <path-to-scan> [options]`
+
+##### Project-Level Installation
+
+For installing within a specific project:
+
+```sh
+composer require marcocesarato/amwscan
+```
+
+After installation, run the scanner using:
+
+```sh
+php vendor/marcocesarato/amwscan/src/index.php <path-to-scan> [options]
+```
+
 ### Source
 
 ##### Download

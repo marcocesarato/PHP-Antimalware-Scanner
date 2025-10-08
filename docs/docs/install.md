@@ -53,13 +53,48 @@ or [download from here](https://codeload.github.com/marcocesarato/PHP-Antimalwar
 
 #### Composer
 
+The package is available on [Packagist](https://packagist.org/packages/marcocesarato/amwscan).
+
+##### Global Installation (recommended)
+
+For system-wide installation:
+
+1. Install the package globally:
+
+   ```shell
+   composer global require marcocesarato/amwscan
+   ```
+
+2. Run the scanner:
+
+   ```shell
+   php $(composer global config home)/vendor/marcocesarato/amwscan/src/index.php <path-to-scan> [options]
+   ```
+
+3. <span class="optional">Optional</span> Create an alias for easier usage:
+
+   ```shell
+   alias amwscan='php $(composer global config home)/vendor/marcocesarato/amwscan/src/index.php'
+   ```
+
+   Then you can run: `amwscan <path-to-scan> [options]`
+
+##### Project-Level Installation
+
+For installing within a specific project:
+
 1. Install composer *(if not installed)*
-2. Install the library using composer:
+2. Install the package using composer:
 
    ```shell
    composer require marcocesarato/amwscan
    ```
-3. Go on `vendor/marcocesarato/amwscan/` to have the source
+
+3. Run the scanner:
+
+   ```shell
+   php vendor/marcocesarato/amwscan/src/index.php <path-to-scan> [options]
+   ```
 
 #### Git
 
