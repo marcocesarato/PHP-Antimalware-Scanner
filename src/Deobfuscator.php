@@ -246,7 +246,7 @@ class Deobfuscator
      */
     private function calc($expr, $level = 0)
     {
-        if($level>100000) return "";
+        if($level>100) return $expr;
         if (is_array($expr)) {
             $expr = $expr[0];
         }
@@ -255,28 +255,49 @@ class Deobfuscator
             return $exprArr[1](explode(',', $exprArr[2]));
         }
 
-        preg_match_all('~([\d\.]+)([\*\/\-\+])?~', $expr, $exprArr);
+        // Use a more flexible regex that handles spaces around operators
+        preg_match_all('~([\d\.]+)\s*([\*\/\-\+])?\s*~', $expr, $exprArr);
         if (!empty($exprArr[1]) && !empty($exprArr[2])) {
-            if (in_array('*', $exprArr[2], true)) {
+            // Filter out empty operators
+            $operators = array_filter($exprArr[2], function($op) { return $op !== ''; });
+            
+            if (in_array('*', $operators, true)) {
                 $pos = array_search('*', $exprArr[2], true);
                 $res = @$exprArr[1][$pos] * @$exprArr[1][$pos + 1];
-                $expr = str_replace(@$exprArr[1][$pos] . '*' . @$exprArr[1][$pos + 1], $res, $expr);
-                $expr = $this->calc($expr, $level+1);
-            } elseif (in_array('/', $exprArr[2], true)) {
+                // Use regex replacement to handle spaces properly
+                $pattern = '~' . preg_quote($exprArr[1][$pos], '~') . '\s*\*\s*' . preg_quote($exprArr[1][$pos + 1], '~') . '~';
+                $newExpr = preg_replace($pattern, $res, $expr, 1);
+                if ($newExpr === $expr) {
+                    return $expr; // No change made, stop recursion
+                }
+                $expr = $this->calc($newExpr, $level+1);
+            } elseif (in_array('/', $operators, true)) {
                 $pos = array_search('/', $exprArr[2], true);
                 $res = $exprArr[1][$pos] / $exprArr[1][$pos + 1];
-                $expr = str_replace($exprArr[1][$pos] . '/' . $exprArr[1][$pos + 1], $res, $expr);
-                $expr = $this->calc($expr, $level+1);
-            } elseif (in_array('-', $exprArr[2], true)) {
+                $pattern = '~' . preg_quote($exprArr[1][$pos], '~') . '\s*/\s*' . preg_quote($exprArr[1][$pos + 1], '~') . '~';
+                $newExpr = preg_replace($pattern, $res, $expr, 1);
+                if ($newExpr === $expr) {
+                    return $expr;
+                }
+                $expr = $this->calc($newExpr, $level+1);
+            } elseif (in_array('-', $operators, true)) {
                 $pos = array_search('-', $exprArr[2], true);
                 $res = $exprArr[1][$pos] - $exprArr[1][$pos + 1];
-                $expr = str_replace($exprArr[1][$pos] . '-' . $exprArr[1][$pos + 1], $res, $expr);
-                $expr = $this->calc($expr, $level+1);
-            } elseif (in_array('+', $exprArr[2], true)) {
+                $pattern = '~' . preg_quote($exprArr[1][$pos], '~') . '\s*-\s*' . preg_quote($exprArr[1][$pos + 1], '~') . '~';
+                $newExpr = preg_replace($pattern, $res, $expr, 1);
+                if ($newExpr === $expr) {
+                    return $expr;
+                }
+                $expr = $this->calc($newExpr, $level+1);
+            } elseif (in_array('+', $operators, true)) {
                 $pos = array_search('+', $exprArr[2], true);
                 $res = $exprArr[1][$pos] + $exprArr[1][$pos + 1];
-                $expr = str_replace($exprArr[1][$pos] . '+' . $exprArr[1][$pos + 1], $res, $expr);
-                $expr = $this->calc($expr, $level+1);
+                $pattern = '~' . preg_quote($exprArr[1][$pos], '~') . '\s*\+\s*' . preg_quote($exprArr[1][$pos + 1], '~') . '~';
+                $newExpr = preg_replace($pattern, $res, $expr, 1);
+                if ($newExpr === $expr) {
+                    return $expr;
+                }
+                $expr = $this->calc($newExpr, $level+1);
             } else {
                 return $expr;
             }
