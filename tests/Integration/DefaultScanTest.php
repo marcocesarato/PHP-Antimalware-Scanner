@@ -56,7 +56,7 @@ class DefaultScanTest extends CLITestCase
         );
 
         // Should report the number of files scanned
-        $this->assertRegExp('/Files scanned:\s*\d+/i', $result['output']);
+        $this->assertMatchesRegularExpression('/Files scanned:\s*\d+/i', $result['output']);
     }
 
     public function testScanDetectsMalwarePatterns()

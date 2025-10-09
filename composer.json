@@ -66,10 +66,24 @@
         "ext-mbstring": "*"
     },
     "require-dev": {
-        "brainmaestro/composer-git-hooks": "^3.0",
+        "brainmaestro/composer-git-hooks": "^2.8",
+        "doctrine/instantiator": "^1.3",
         "friendsofphp/php-cs-fixer": "^3.88",
         "marcocesarato/php-conventional-changelog": "^1.17",
-        "phpunit/phpunit": "^8.5|^9.5"
+        "phpunit/phpunit": "^8.5|^9.5",
+        "psr/log": "^1.1",
+        "symfony/console": "^5.4",
+        "symfony/deprecation-contracts": "^2.5",
+        "symfony/event-dispatcher": "^5.4",
+        "symfony/event-dispatcher-contracts": "^2.5",
+        "symfony/filesystem": "^5.4",
+        "symfony/finder": "^5.4",
+        "symfony/options-resolver": "^5.4",
+        "symfony/polyfill-php80": "^1.16",
+        "symfony/process": "^5.4",
+        "symfony/service-contracts": "^2.5",
+        "symfony/stopwatch": "^5.4",
+        "symfony/string": "^5.4"
     },
     "config": {
         "process-timeout": 0,
