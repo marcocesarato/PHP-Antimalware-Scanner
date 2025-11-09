@@ -1,3 +1,12 @@
+# [](https://github.com/marcocesarato/PHP-Antimalware-Scanner/compare/v0.15.0...v) (2025-11-09)
+
+
+### Features
+
+* Support opening vim/nano at specific line where malware was detected ([5f2fa4c](https://github.com/marcocesarato/PHP-Antimalware-Scanner/commit/5f2fa4c42bb109d5e58cc1cea6de49ee2aef015b))
+
+
+
 <!--- BEGIN HEADER -->
 # Changelog
 
