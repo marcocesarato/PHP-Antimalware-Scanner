@@ -1038,7 +1038,7 @@ class Scanner
                     $pattern,
                     $level = CodeMatch::WARNING,
                     $descriptionPrefix = '',
-                    $functionType = '',
+                    $functionType = ''
                 ) use ($contentRaw, $funcRaw, &$patternFound) {
                     $type = 'function';
                     $suffix = '';
